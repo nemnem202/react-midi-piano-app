@@ -1,3 +1,5 @@
+This is a simple Piano App made with React and the WebMidiApi. Host on: (https://nemnem202.github.io/react-midi-piano-app/)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
