@@ -1,0 +1,60 @@
+.switch {
+  height: 19px;
+  width: 32px;
+  position: relative;
+  margin-left: 10px;
+}
+
+.back {
+  border: 2px solid var(--color5);
+  width: 30px;
+  height: 15px;
+  border-radius: 10px;
+  position: absolute;
+}
+
+.switch:hover .back {
+  background-color: var(--color5);
+}
+
+.circle {
+  background-color: var(--foreground);
+  border: 2px solid var(--foreground);
+  z-index: 1;
+  width: 15px;
+  height: 15px;
+  border-radius: 10px;
+  position: absolute;
+  transition: transform ease 0.2s, width ease 0.2s;
+}
+
+.circle:hover {
+  box-shadow: 0px 0px 10px 5px var(--color9);
+}
+
+.background {
+  background-color: var(--color5);
+  border: 1px solid var(--color5);
+  /*margin: 1px;*/
+  width: 15px;
+  height: 15px;
+  border-radius: 10px;
+  position: absolute;
+  transition: transform ease 0.2s, width ease 0.2s;
+}
+
+.background.enabled {
+  width: 15px;
+}
+
+.background.disabled {
+  width: 30px;
+}
+
+.circle.enabled {
+  transform: translateX(0);
+}
+
+.circle.disabled {
+  transform: translateX(16px);
+}
