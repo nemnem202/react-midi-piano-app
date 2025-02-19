@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect } from "react";
+import React from "react";
 import useStore from "./store";
 import MidiInterface from "./modules/midi-Interface";
 import PianoSound from "./modules/pianoSound";
@@ -18,6 +18,8 @@ import Points from "./modules/points";
 import Partition from "./modules/partition";
 import Settings from "./modules/Settings";
 import SuggestionSound from "./modules/suggestionSound";
+import { FaCog } from "react-icons/fa";
+import CursorFollower from "./modules/cursor";
 
 function App() {
   const setSettingsMenu = useStore((state) => state.setSettingsMenu);
@@ -29,7 +31,8 @@ function App() {
   // console.log("App render");
   return (
     <div className="AppSettings">
-      <div className="App" onClick={() => setSettingsMenu(true)}>
+      <CursorFollower />
+      <div className="App">
         <MidiInterface />
         <NotesSuggestion />
         <VictorySoundEffect />
@@ -37,7 +40,10 @@ function App() {
         <PianoSound />
         <Metronome />
         {suggestionVolume > 0 ? <SuggestionSound /> : ""}
-
+        <FaCog
+          className={`settingsIcon ${settingsMenu ? "open red" : ""}`}
+          onClick={() => setSettingsMenu(!settingsMenu)}
+        />
         {!scrollMode ? (
           <div className="PlayBpmSignature">
             <PlayButton />
@@ -64,21 +70,29 @@ function App() {
           <ScrollMode />
         </div>
         <div className="partitionChordName">
-          {displayPartition ? <Partition /> : ""}
-
-          <DisplayChordName />
+          <Partition />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              height: "100%",
+            }}
+          >
+            <DisplayChordName />
+            <div className="metroScoreGrid">
+              {" "}
+              <div className="points">
+                {" "}
+                <Points />
+              </div>
+              <div className="scoreContainer">
+                <Score />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="metroScoreGrid">
-          {" "}
-          <div className="points">
-            {" "}
-            <Points />
-          </div>
-          <div className="scoreContainer">
-            <Score />
-          </div>
-        </div>
         <PianoComponent />
       </div>
       <div className={`Settings ${settingsMenu ? "open" : ""}`}>

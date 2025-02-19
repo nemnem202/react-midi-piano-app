@@ -45,8 +45,9 @@ export default function Score() {
   return (
     <>
       <h3 className="green">correct</h3>
-      <h2 className="green">
-        {correct.length} / {activeSuggestion.intervalles?.length}
+      <h2 className="green" style={{ display: "flex", gap: "5px" }}>
+        <p>{correct.length}</p> <p>/</p>{" "}
+        <p>{activeSuggestion.intervalles?.length}</p>
       </h2>
       <h3 className="red">wrong</h3>
       <h2 className="red">{wrong}</h2>

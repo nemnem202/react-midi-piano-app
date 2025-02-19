@@ -3,6 +3,8 @@
   width: 32px;
   position: relative;
   margin-left: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .back {

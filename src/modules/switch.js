@@ -12,7 +12,7 @@ export default function Switch({ onClick, bool }) {
         if (onClick) onClick();
       }}
     >
-      <div className="back cursorPointer"></div>
+      <div className="back"></div>
       <div className={`circle ${bool ? "disabled" : "enabled"}`}></div>
       <div className={` background ${bool ? "disabled" : "enabled"}`}></div>
     </div>

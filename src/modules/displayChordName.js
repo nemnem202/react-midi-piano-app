@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useStore from "../store";
 import "./displayChordName.css";
 
@@ -9,9 +9,9 @@ export default function DisplayChordName() {
   const passedSuggestion = useStore((state) => state.passedSuggestion);
   const play = useStore((state) => state.play);
   //console.log("displayChord module");
-  const container = document.querySelector(".chordContainer");
 
   useEffect(() => {
+    const container = document.querySelector(".chordContainer");
     if (!play) {
       return;
     }
@@ -37,7 +37,18 @@ export default function DisplayChordName() {
   );
 }
 
-function translateChords() {
+function setChordContainer(container, sug, next, active, passed) {
+  if (passed && active && next && sug) {
+    container.innerHTML = `
+    <div class="passedChord">${passed}</div>
+    <div class="activeChord">${active}</div>
+    <div class="nextChord">${next}</div>
+    <div class="nextChord2">${sug}</div>
+    `;
+  }
+}
+
+const translateChords = () => {
   const passedChord = document.querySelector(".passedChord");
   const activeChord = document.querySelector(".activeChord");
   const nextChord = document.querySelector(".nextChord");
@@ -61,15 +72,4 @@ function translateChords() {
   //nextChord2.style.backgroundPosition = "-840px 0";
   nextChord2.style.opacity = "0.5";
   activeChord.style.fontSize = "300%";
-}
-
-function setChordContainer(container, sug, next, active, passed) {
-  if (passed && active && next && sug) {
-    container.innerHTML = `
-    <div class="passedChord">${passed}</div>
-    <div class="activeChord">${active}</div>
-    <div class="nextChord">${next}</div>
-    <div class="nextChord2">${sug}</div>
-    `;
-  }
-}
+};

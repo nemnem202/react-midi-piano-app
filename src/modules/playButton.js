@@ -41,7 +41,6 @@ export default function PlayButton() {
         height: "30px",
         width: "30px",
       }}
-      className="cursorPointer"
     >
       {play ? <FaStop className="red" size={30} /> : <FaPlay size={30} />}
     </div>

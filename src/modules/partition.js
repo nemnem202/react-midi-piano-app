@@ -4,7 +4,7 @@ import useStore from "../store";
 
 export default function Partition() {
   const activeSuggestion = useStore((state) => state.activeSuggestion);
-
+  const displayPartition = useStore((state) => state.displayPartition);
   //console.log("partition module");
 
   const array = [
@@ -59,7 +59,10 @@ export default function Partition() {
   }, [activeSuggestion]);
 
   return (
-    <div className="partitionContainer">
+    <div
+      className="partitionContainer"
+      style={displayPartition ? {} : { display: "none" }}
+    >
       <div className="line l3"></div>
       <div className="line l5"></div>
       <div className="line l7"></div>

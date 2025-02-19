@@ -2,86 +2,46 @@ import { Button, Menu, MenuItem } from "@mui/material";
 import { useState, useRef, useEffect } from "react";
 import useStore from "../store";
 import { chords, scales, notesList } from "./arrays";
+import Switch from "./switch";
 
 export default function ChordScalesSetting() {
   const mode = useStore((state) => state.mode);
   const setMode = useStore((state) => state.setMode);
   const random = useStore((state) => state.random);
-  const setScale = useStore((state) => state.setScale);
-  const scale = useStore((state) => state.scale);
-  const note = useStore((state) => state.note);
-  const setNote = useStore((state) => state.setNote);
 
-  const themeChoice = useStore((state) => state.themeChoice);
+  const lastNotesListStore = useStore((state) => state.lastNotesListStore);
+  const notesListStore = useStore((state) => state.notesListStore);
+  const setNotesListStore = useStore((state) => state.setNotesListStore);
+  const pushNoteListStore = useStore((state) => state.pushNoteListStore);
+  const filterNoteListStore = useStore((state) => state.filterNoteListStore);
 
-  const [anchorScale, setAnchorScale] = useState(null);
-  const [anchorNote, setAnchorNote] = useState(null);
+  const lastScalesListStore = useStore((state) => state.lastScalesListStore);
+  const scalesListStore = useStore((state) => state.scalesListStore);
+  const setScalesListStore = useStore((state) => state.setScalesListStore);
+  const pushScalesListStore = useStore((state) => state.pushScalesListStore);
+  const filterScalesListStore = useStore(
+    (state) => state.filterScalesListStore
+  );
 
-  const noteRef = useRef(null);
-  const scaleRef = useRef(null);
-
-  const inputRef = useRef(null);
-
-  const handleCloseScale = (e) => {
-    setAnchorScale(null); // Ferme le menu
-    setScale(e.target.value);
-  };
-
-  const handleCloseNote = (e) => {
-    setAnchorNote(null);
-    setNote(e.target.value);
-  };
-
-  const handleClickScale = (event) => {
-    setAnchorScale(event.currentTarget); // Ouvre le menu en utilisant l'élément cliqué
-  };
-
-  const handleClickNote = (event) => {
-    setAnchorNote(event.currentTarget); // Ouvre le menu en utilisant l'élément cliqué
-  };
-
-  useEffect(() => {
-    adjustWidth(noteRef, note);
-  }, [note, mode]);
-
-  useEffect(() => {
-    adjustWidth(scaleRef, scale);
-  }, [scale]);
-
-  const adjustWidth = (ref) => {
-    if (ref.current) {
-      // Crée un span temporaire
-      const tempSpan = document.createElement("span");
-      tempSpan.style.visibility = "hidden";
-      tempSpan.style.position = "absolute";
-      tempSpan.style.display = "inline-block";
-      tempSpan.style.whiteSpace = "pre";
-
-      // Récupère les styles de l'input, incluant la police, la taille et autres propriétés
-      const inputStyles = getComputedStyle(ref.current);
-      tempSpan.style.font = inputStyles.font;
-      tempSpan.style.fontSize = inputStyles.fontSize;
-      tempSpan.style.fontWeight = inputStyles.fontWeight;
-      tempSpan.style.fontFamily = inputStyles.fontFamily;
-      tempSpan.style.letterSpacing = inputStyles.letterSpacing;
-
-      // Applique le texte à mesurer
-      tempSpan.textContent = ref.current.value || " ";
-      document.body.appendChild(tempSpan);
-
-      // Applique la largeur calculée plus un petit ajout
-      ref.current.style.width = `${tempSpan.offsetWidth + 5}px`;
-      ref.current.style.boxSizing = "content-box"; // Appliquer aussi à l'input
-
-      // Nettoyer après le calcul
-      document.body.removeChild(tempSpan);
+  const handleNotesChange = (num) => {
+    if (notesListStore.includes(num)) {
+      filterNoteListStore(num);
+    } else {
+      pushNoteListStore(num);
     }
   };
 
+  const handleScaleChange = (num) => {
+    if (scalesListStore.includes(num)) {
+      filterScalesListStore(num);
+    } else {
+      pushScalesListStore(num);
+    }
+  };
   return (
     <>
       {" "}
-      <div>
+      <div className="modeButtons">
         Mode :
         <button
           className={mode === 1 ? "backGroundRed" : ""}
@@ -101,208 +61,157 @@ export default function ChordScalesSetting() {
         </button>
       </div>
       <div className="setNotes">
-        Notes{" "}
-        <div>
-          {mode === 1 ? "In the scale of" : "All scales will be"}
-          {mode === 1 ? (
-            <input
-              ref={noteRef}
-              type="text"
-              value={notesList[note]}
-              onClick={handleClickNote}
-              onChange={(e) => adjustWidth(inputRef)}
-            />
-          ) : (
-            ""
-          )}
-
-          <Menu
-            anchorEl={anchorNote}
-            open={Boolean(anchorNote)}
-            onClose={handleCloseNote}
-            sx={{
-              "& .MuiMenu-paper": {
-                backgroundColor:
-                  themeChoice === 1
-                    ? "rgba(255, 56, 100, 0.5)"
-                    : themeChoice === 2
-                    ? "rgba(71, 155, 135, 0.5)"
-                    : themeChoice === 3
-                    ? "rgba(129, 151, 163, 0.5)"
-                    : "",
-
-                borderRadius: "2px", // Bords arrondis
-                padding: "0px", // Padding interne du menu
-                boxShadow: "0px 0px 6px rgba(0, 0, 0, 0.5)", // Ombre portée
-                color: "var(--foreground)",
-              },
-            }}
+        Root note of the scale
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <span
+            className={notesListStoreIsComplete(notesListStore) ? "red" : ""}
           >
-            {notesList.map((note, index) => (
-              <MenuItem key={index} onClick={handleCloseNote} value={index}>
-                {note}
-              </MenuItem>
-            ))}
-          </Menu>
-          <input
-            ref={scaleRef}
-            type="text"
-            value={scales[scale].nom}
-            onClick={handleClickScale}
-            onChange={(e) => adjustWidth(scaleRef)}
+            Random Notes
+          </span>{" "}
+          <Switch
+            onClick={() => {
+              notesListStoreIsComplete(notesListStore)
+                ? setNotesListStore(lastNotesListStore)
+                : setNotesListStore([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+            }}
+            bool={notesListStoreIsComplete(notesListStore)}
           />
-          <Menu
-            anchorEl={anchorScale}
-            open={Boolean(anchorScale)}
-            onClose={handleCloseScale}
-            sx={{
-              "& .MuiMenu-paper": {
-                backgroundColor:
-                  themeChoice === 1
-                    ? "rgba(255, 56, 100, 0.5)"
-                    : themeChoice === 2
-                    ? "rgba(71, 155, 135, 0.5)"
-                    : themeChoice === 3
-                    ? "rgba(129, 151, 163, 0.5)"
-                    : "",
-                borderRadius: "2px", // Bords arrondis
-                padding: "0px", // Padding interne du menu
-                boxShadow: "0px 0px 6px rgba(0, 0, 0, 0.5)", // Ombre portée
-                color: "var(--foreground)",
-              },
-            }}
-          >
-            {scales.map((sc, index) => (
-              <MenuItem key={index} onClick={handleCloseScale} value={index}>
-                {sc.nom}
-              </MenuItem>
-            ))}
-          </Menu>
         </div>
       </div>
       <div className="gridBlack">
         <button
-          className={
-            scales[scale].intervalles.includes((1 + note) % 12)
-              ? "backGroundRed"
-              : ""
-          }
-          style={{ gridColumn: "1" }}
+          style={{ gridRow: "1", gridColumn: "1" }}
+          onClick={() => handleNotesChange(1)}
+          className={notesListStore.includes(1) ? "backGroundRed" : ""}
         >
           C#
         </button>{" "}
         <button
-          className={
-            scales[scale].intervalles.includes((3 + note) % 12)
-              ? "backGroundRed"
-              : ""
-          }
           style={{ gridRow: "1", gridColumn: "2" }}
+          onClick={() => handleNotesChange(3)}
+          className={notesListStore.includes(3) ? "backGroundRed" : ""}
         >
           D#
         </button>{" "}
         <button
-          className={
-            scales[scale].intervalles.includes((6 + note) % 12)
-              ? "backGroundRed"
-              : ""
-          }
           style={{ gridRow: "1", gridColumn: "4" }}
+          onClick={() => handleNotesChange(6)}
+          className={notesListStore.includes(6) ? "backGroundRed" : ""}
         >
           F#
         </button>{" "}
         <button
-          className={
-            scales[scale].intervalles.includes((8 + note) % 12)
-              ? "backGroundRed"
-              : ""
-          }
           style={{ gridRow: "1", gridColumn: "5" }}
+          onClick={() => handleNotesChange(8)}
+          className={notesListStore.includes(8) ? "backGroundRed" : ""}
         >
           G#
         </button>{" "}
         <button
-          className={
-            scales[scale].intervalles.includes((10 + note) % 12)
-              ? "backGroundRed"
-              : ""
-          }
           style={{ gridRow: "1", gridColumn: "6" }}
+          onClick={() => handleNotesChange(10)}
+          className={notesListStore.includes(10) ? "backGroundRed" : ""}
         >
           A#
         </button>{" "}
       </div>
       <div className="gridWhite">
         <button
-          className={
-            scales[scale].intervalles.includes((0 + note) % 12)
-              ? "backGroundRed"
-              : ""
-          }
           style={{ gridColumn: "1" }}
+          onClick={() => handleNotesChange(0)}
+          className={notesListStore.includes(0) ? "backGroundRed" : ""}
         >
           C
         </button>{" "}
         <button
-          className={
-            scales[scale].intervalles.includes((2 + note) % 12)
-              ? "backGroundRed"
-              : ""
-          }
           style={{ gridColumn: "2" }}
+          onClick={() => handleNotesChange(2)}
+          className={notesListStore.includes(2) ? "backGroundRed" : ""}
         >
           D
         </button>{" "}
         <button
-          className={
-            scales[scale].intervalles.includes((4 + note) % 12)
-              ? "backGroundRed"
-              : ""
-          }
           style={{ gridColumn: "3" }}
+          onClick={() => handleNotesChange(4)}
+          className={notesListStore.includes(4) ? "backGroundRed" : ""}
         >
           E
         </button>{" "}
         <button
-          className={
-            scales[scale].intervalles.includes((5 + note) % 12)
-              ? "backGroundRed"
-              : ""
-          }
           style={{ gridColumn: "4" }}
+          onClick={() => handleNotesChange(5)}
+          className={notesListStore.includes(5) ? "backGroundRed" : ""}
         >
           F
         </button>{" "}
         <button
-          className={
-            scales[scale].intervalles.includes((7 + note) % 12)
-              ? "backGroundRed"
-              : ""
-          }
           style={{ gridColumn: "5" }}
+          onClick={() => handleNotesChange(7)}
+          className={notesListStore.includes(7) ? "backGroundRed" : ""}
         >
           G
         </button>{" "}
         <button
-          className={
-            scales[scale].intervalles.includes((9 + note) % 12)
-              ? "backGroundRed"
-              : ""
-          }
           style={{ gridColumn: "6" }}
+          onClick={() => handleNotesChange(9)}
+          className={notesListStore.includes(9) ? "backGroundRed" : ""}
         >
           A
         </button>{" "}
         <button
-          className={
-            scales[scale].intervalles.includes((11 + note) % 12)
-              ? "backGroundRed"
-              : ""
-          }
           style={{ gridColumn: "7" }}
+          onClick={() => handleNotesChange(11)}
+          className={notesListStore.includes(11) ? "backGroundRed" : ""}
         >
           B
         </button>
+      </div>
+      <div className="setScales">
+        Chords
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <span
+            className={scalesListStore.length === scales.length ? "red" : ""}
+          >
+            Random Scale/chord
+          </span>{" "}
+          <Switch
+            onClick={() => {
+              scalesListStore.length === scales.length
+                ? setScalesListStore(lastScalesListStore)
+                : setScalesListStore(
+                    Array.from({ length: scales.length }, (_, i) => i)
+                  );
+            }}
+            bool={scalesListStore.length === scales.length}
+          />
+        </div>
+      </div>
+      <div className="scalesButtons">
+        {mode === 2
+          ? scales.map((scale, index) => (
+              <button
+                key={index}
+                onClick={() => handleScaleChange(index)}
+                className={
+                  scalesListStore.includes(index) ? "backGroundRed" : ""
+                }
+              >
+                {scale.nom}
+              </button>
+            ))
+          : mode === 1
+          ? chords.map((chord, index) => (
+              <button
+                key={index}
+                onClick={() => handleScaleChange(index)}
+                className={
+                  scalesListStore.includes(index) ? "backGroundRed" : ""
+                }
+              >
+                {chord.nom}
+              </button>
+            ))
+          : ""}
       </div>
     </>
   );
@@ -375,4 +284,15 @@ const notesToMidi = (note) => {
 
   // Calculer la valeur MIDI
   return noteIndex + (octave + 1) * 12;
+};
+
+const notesListStoreIsComplete = (array) => {
+  if (
+    JSON.stringify(array) ===
+    JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+  ) {
+    return true;
+  } else {
+    return false;
+  }
 };

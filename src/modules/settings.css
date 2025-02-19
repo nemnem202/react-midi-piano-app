@@ -11,7 +11,8 @@
   padding: 0%;
 }
 
-.setNotes {
+.setNotes,
+.setScales {
   display: flex;
   justify-content: space-between;
   align-items: center;

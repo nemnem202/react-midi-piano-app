@@ -10,6 +10,7 @@
   --color3: rgb(45, 0, 117);
   --color4: #b4298a;
   --color5: rgb(255 56 100);
+  --olor5op: rgba(255, 56, 100, 0.5);
   --color6: white;
   --color7: black;
   --color8: red;
@@ -68,12 +69,15 @@ body {
   overflow: hidden;
 }
 
+* {
+  cursor: url("../public/circle.svg") 10 10, auto;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  cursor: default;
 }
 
 .AppSettings {
@@ -96,6 +100,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
 }
 
 .Settings {
@@ -109,11 +114,27 @@ body {
   z-index: 10;
   box-shadow: 0px 0px 00px 00px rgba(0, 0, 0, 0.8);
   transform: translateX(-50vh);
-  transition: all ease 0.2s;
+  transition: transform ease 0.3s, box-shadow ease 0.3s, opacity ease 0.3s;
+  opacity: 0;
+}
+
+.settingsIcon {
+  height: 33px;
+  width: 33px;
+  position: absolute;
+  margin: 1% 7%;
+  z-index: 9;
+  transform: translateX(0vh) rotate(0deg);
+  transition: transform ease-out 0.3s;
+}
+
+.settingsIcon.open {
+  transform: translateX(40vh) rotate(180deg);
 }
 
 .Settings.open {
-  box-shadow: 0px 0px 50px 50px rgba(0, 0, 0, 0.8);
+  opacity: 1;
+  box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.5);
   transform: translateX(0vh);
 }
 
@@ -125,16 +146,18 @@ select {
   border: 1px solid var(--color5);
   background: none;
   font: inherit;
-  cursor: pointer;
   width: fit-content;
   padding: 5px;
   font-weight: 600;
   border-radius: 3px;
   margin: 0;
   outline: none;
-  -moz-appearance: textfield;
   appearance: none;
   margin: 0px 8px;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 input:hover,
@@ -144,6 +167,7 @@ button:hover,
 .radio-text:hover,
 .backGroundRed {
   background-color: var(--color5);
+  cursor: none;
 }
 
 input::-webkit-outer-spin-button,
@@ -165,16 +189,11 @@ textarea::selection {
   color: var(--color1);
 }
 
-.cursorPointer {
-  cursor: pointer;
-}
-
 .PlayBpmSignature {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1% 5% 0% 5%;
-  height: 4%;
 }
 
 .BpmSignature {
@@ -207,24 +226,23 @@ textarea::selection {
 
 .partitionChordName {
   display: flex;
+  height: 200px;
+  padding: 0% 5%;
   justify-content: center;
   align-items: center;
-  height: fit-content;
-  padding: 0% 5%;
 }
 
 .partitionContainer {
   width: 200px;
   height: 300px;
-  transform: translateY(15%);
 }
 
 .metroScoreGrid {
   display: grid;
-  grid-template-columns: 170px 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   justify-content: center;
   align-items: top;
-  padding: 0% 5%;
+  width: 1400px;
 }
 
 .scoreContainer {
@@ -247,9 +265,9 @@ textarea::selection {
   border-right: 1px solid var(--foreground);
 }
 .points {
-  grid-column: 3;
+  grid-column: 2;
 }
 
 .scoreContainer {
-  grid-column: 4;
+  grid-column: 3;
 }

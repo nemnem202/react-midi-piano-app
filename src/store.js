@@ -1,6 +1,5 @@
 // src/store/useStore.js
 import { create } from "zustand";
-import setRandom from "./modules/setRandom";
 
 const useStore = create((set) => ({
   noteOn: undefined,
@@ -90,8 +89,6 @@ const useStore = create((set) => ({
   passedSuggestion: [],
   setSuggestion: (array) =>
     set((state) => {
-      if (JSON.stringify(state.suggestion) === JSON.stringify(array))
-        return state;
       return {
         passedSuggestion: state.activeSuggestion,
         activeSuggestion: state.nextSuggestion,
@@ -171,26 +168,85 @@ const useStore = create((set) => ({
       return { themeChoice: num };
     }),
 
-  random: true,
-  setRandom: (bool) =>
+  lastNotesListStore: [0],
+  notesListStore: [0, 2, 4, 5, 7, 9, 11],
+
+  setNotesListStore: (array) =>
     set((state) => {
-      if (state.random === bool) return state; // Corrigé ici
-      return { random: bool }; // Met à jour correctement l'état
+      if (JSON.stringify(state.notesListStore) === JSON.stringify(array))
+        return state;
+      if (array.length <= 0) {
+        return {
+          lastNotesListStore: state.notesListStore,
+          notesListStore: [0],
+        };
+      }
+      return {
+        lastNotesListStore: state.notesListStore,
+        notesListStore: array,
+      };
     }),
 
-  scale: 0,
-  setScale: (num) =>
+  pushNoteListStore: (string) =>
     set((state) => {
-      if (state.scale === num) return state;
-      return { scale: num };
+      if (state.notesListStore.includes(string)) return state;
+
+      return { notesListStore: [...state.notesListStore, string] };
     }),
 
-  note: 0,
-  setNote: (num) =>
+  filterNoteListStore: (string) =>
     set((state) => {
-      if (state.note === num) return state;
-      console.log("noteChanged", num);
-      return { note: num };
+      if (!state.notesListStore.includes(string)) return state;
+      if (state.notesListStore.length <= 1) {
+        return {
+          lastNotesListStore: state.notesListStore,
+          notesListStore: [0],
+        };
+      }
+      return {
+        notesListStore: state.notesListStore.filter((note) => note !== string),
+      };
+    }),
+
+  lastScalesListStore: [0],
+  scalesListStore: [0, 1, 4, 5],
+
+  setScalesListStore: (array) =>
+    set((state) => {
+      if (JSON.stringify(state.scalesListStore) === JSON.stringify(array))
+        return state;
+      if (array.length <= 0) {
+        return {
+          lastScalesListStore: state.scalesListStore,
+          scalesListStore: [0],
+        };
+      }
+      return {
+        lastScalesListStore: state.scalesListStore,
+        scalesListStore: array,
+      };
+    }),
+
+  pushScalesListStore: (string) =>
+    set((state) => {
+      if (state.scalesListStore.includes(string)) return state;
+      return { scalesListStore: [...state.scalesListStore, string] };
+    }),
+
+  filterScalesListStore: (string) =>
+    set((state) => {
+      if (!state.scalesListStore.includes(string)) return state;
+      if (state.scalesListStore.length <= 1) {
+        return {
+          lastScalesListStore: state.scalesListStore,
+          scalesListStore: [0],
+        };
+      }
+      return {
+        scalesListStore: state.scalesListStore.filter(
+          (note) => note !== string
+        ),
+      };
     }),
 }));
 

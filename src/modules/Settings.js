@@ -19,11 +19,15 @@ export default function Settings() {
 
   const scrollMode = useStore((state) => state.scrollMode);
 
-  const random = useStore((state) => state.random);
-  const setRandom = useStore((state) => state.setRandom);
+  const lastScale = useStore((state) => state.lastScale);
+  const scale = useStore((state) => state.scale);
+  const setScale = useStore((state) => state.setScale);
 
   const mode = useStore((state) => state.mode);
   const setMode = useStore((state) => state.setMode);
+
+  const notesListStore = useStore((state) => state.notesListStore);
+  const setNotesListStore = useStore((state) => state.setNotesListStore);
 
   const setPianoVolume = useStore((state) => state.setPianoVolume);
   const setMetronomeVolume = useStore((state) => state.setMetronomeVolume);
@@ -37,17 +41,12 @@ export default function Settings() {
 
       <ChordScalesSetting />
 
-      <div style={{ display: "flex" }}>
-        <span className={random ? "red" : ""}>Random</span>{" "}
-        <Switch onClick={() => setRandom(!random)} bool={random} />
-      </div>
-
       <div style={{ display: "flex", alignItems: "center" }}>
         <span className={scrollMode ? "red" : ""}>Scroll Mode</span>{" "}
         <ScrollMode />
       </div>
 
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <span className={!displayPartition ? "red" : ""}>Hide partition</span>{" "}
         <Switch
           onClick={() => setDisplayPartition(!displayPartition)}

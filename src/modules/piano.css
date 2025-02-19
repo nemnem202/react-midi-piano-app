@@ -2,7 +2,6 @@
   display: flex;
   background: var(--gradient);
   border: 1px solid black;
-  cursor: pointer;
   width: fit-content;
   margin: 0px auto 5%;
   position: relative;
@@ -68,6 +67,7 @@
 .octaveContainer {
   position: relative;
   height: 200px;
+  width: 400px;
 }
 
 .whiteKeyContainer,

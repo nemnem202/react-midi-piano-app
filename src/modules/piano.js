@@ -89,7 +89,7 @@ export default function PianoComponent() {
         )}
       </div>
       {Array.from({ length: nmbrOctaves }).map((_, index) => (
-        <div key={index} className="octaveContainer" style={{ width: "400px" }}>
+        <div key={index} className="octaveContainer">
           <div className="whiteKeyContainer">
             <div className={`whiteKey key-0 index-${0 + 12 * index}`}></div>
 
