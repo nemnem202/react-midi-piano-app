@@ -12,15 +12,41 @@ export default function PianoSound() {
 
   const synthRef = useRef(null);
   useEffect(() => {
-    if (pianoSound) {
+    if (pianoVolume > 0) {
       console.log("Audio context was allowed to start");
 
-      synthRef.current = new Tone.PolySynth(Tone.Synth).toDestination();
+      synthRef.current = new Tone.PolySynth(Tone.AMSynth, {
+        harmonicity: 2,
+        oscillator: {
+          type: "amsine2",
+          modulationType: "sine",
+          harmonicity: 1.01,
+        },
+        envelope: {
+          attack: 0.006,
+          decay: 4,
+          sustain: 0.04,
+          release: 1.2,
+        },
+        modulation: {
+          volume: 13,
+          type: "amsine2",
+          modulationType: "sine",
+          harmonicity: 12,
+        },
+        modulationEnvelope: {
+          attack: 0.006,
+          decay: 0.2,
+          sustain: 0.2,
+          release: 0.4,
+        },
+      }).toDestination();
       return () => {
         synthRef.current.dispose(); // Nettoyer à la destruction du composant
       };
     }
-  }, [pianoSound]);
+  }, [pianoVolume]);
+
   useEffect(() => {
     if (noteOn && synthRef.current) {
       synthRef.current.triggerAttack(midiToNote(noteOn));

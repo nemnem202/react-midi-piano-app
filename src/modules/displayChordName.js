@@ -16,6 +16,10 @@ export default function DisplayChordName() {
       return;
     }
     translateChords();
+    let chord = container.querySelectorAll("div");
+    chord.forEach((c) => {
+      adaptTextSize(c);
+    });
     setTimeout(() => {
       setChordContainer(
         container,
@@ -40,11 +44,15 @@ export default function DisplayChordName() {
 function setChordContainer(container, sug, next, active, passed) {
   if (passed && active && next && sug) {
     container.innerHTML = `
-    <div class="passedChord">${passed}</div>
-    <div class="activeChord">${active}</div>
-    <div class="nextChord">${next}</div>
-    <div class="nextChord2">${sug}</div>
+      <div class="passedChord">${passed}</div>
+      <div class="activeChord">${active}</div>
+      <div class="nextChord">${next}</div>
+      <div class="nextChord2">${sug}</div>
     `;
+    let chord = container.querySelectorAll("div");
+    chord.forEach((c) => {
+      adaptTextSize(c);
+    });
   }
 }
 
@@ -57,19 +65,35 @@ const translateChords = () => {
   passedChord.style.transform = "translateX(-110%)";
   passedChord.style.opacity = "0";
   passedChord.style.fontSize = "100%";
+  adaptTextSize(passedChord);
 
   activeChord.style.transform = "translateX(-110%)";
   //activeChord.style.backgroundPosition = "0px 0";
   activeChord.style.fontSize = "300%";
   activeChord.style.opacity = "0.5";
+  adaptTextSize(activeChord);
 
   nextChord.style.transform = "translateX(-110%)";
   //nextChord.style.backgroundPosition = "-420px 0";
   nextChord.style.fontSize = "500%";
   nextChord.style.opacity = "1";
+  adaptTextSize(nextChord);
 
   nextChord2.style.transform = "translateX(-110%)";
   //nextChord2.style.backgroundPosition = "-840px 0";
   nextChord2.style.opacity = "0.5";
   activeChord.style.fontSize = "300%";
+  adaptTextSize(nextChord2);
 };
+
+function adaptTextSize(e) {
+  let textLength = e.textContent.length;
+
+  if (textLength < 5) {
+    e.style.fontSize = "500%"; // Texte court => plus grand
+  } else if (textLength < 10) {
+    e.style.fontSize = "300%"; // Taille moyenne
+  } else {
+    e.style.fontSize = "100%"; // Texte long => plus petit
+  }
+}

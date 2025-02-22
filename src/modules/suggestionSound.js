@@ -13,7 +13,17 @@ export default function SuggestionSound() {
   useEffect(() => {
     console.log("SuggestionSound synth init");
     Tone.Transport.bpm.value = bpm;
-    synthRef.current = new Tone.PolySynth(Tone.Synth).toDestination();
+    synthRef.current = new Tone.PolySynth(Tone.Synth, {
+      portamento: 0.0,
+      oscillator: {
+        type: "square4",
+      },
+      envelope: {
+        attack: 2,
+        sustain: 0.2,
+        release: 2,
+      },
+    }).toDestination();
     return () => {
       console.log("SuggestionSound synth dispose");
       synthRef.current.dispose(); // Nettoyer à la destruction du composant

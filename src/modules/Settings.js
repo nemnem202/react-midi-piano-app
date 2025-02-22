@@ -1,33 +1,22 @@
-import { useState, useRef, useEffect } from "react";
 import "./settings.css";
 import Switch from "./switch";
 import useStore from "../store";
 import Slider from "@mui/material/Slider";
-import { Button, Menu, MenuItem } from "@mui/material";
 import ScrollMode from "./scrollMode";
 import ChordScalesSetting from "./chordScalesSetting";
 
 export default function Settings() {
   const displayPartition = useStore((state) => state.displayPartition);
   const setDisplayPartition = useStore((state) => state.setDisplayPartition);
+  const displayPiano = useStore((state) => state.displayPiano);
+  const setDisplayPiano = useStore((state) => state.setDisplayPiano);
 
   const pianoVolume = useStore((state) => state.pianoVolume);
-  const pianoSound = useStore((state) => state.pianoSound);
   const metronomeVolume = useStore((state) => state.metronomeVolume);
   const suggestionVolume = useStore((state) => state.suggestionVolume);
   const victoryVolume = useStore((state) => state.victoryVolume);
 
   const scrollMode = useStore((state) => state.scrollMode);
-
-  const lastScale = useStore((state) => state.lastScale);
-  const scale = useStore((state) => state.scale);
-  const setScale = useStore((state) => state.setScale);
-
-  const mode = useStore((state) => state.mode);
-  const setMode = useStore((state) => state.setMode);
-
-  const notesListStore = useStore((state) => state.notesListStore);
-  const setNotesListStore = useStore((state) => state.setNotesListStore);
 
   const setPianoVolume = useStore((state) => state.setPianoVolume);
   const setMetronomeVolume = useStore((state) => state.setMetronomeVolume);
@@ -47,10 +36,18 @@ export default function Settings() {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <span className={!displayPartition ? "red" : ""}>Hide partition</span>{" "}
+        <span className={displayPartition ? "red" : ""}>Partition</span>{" "}
         <Switch
           onClick={() => setDisplayPartition(!displayPartition)}
-          bool={!displayPartition}
+          bool={displayPartition}
+        />
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <span className={displayPiano ? "red" : ""}>Piano</span>{" "}
+        <Switch
+          onClick={() => setDisplayPiano(!displayPiano)}
+          bool={displayPiano}
         />
       </div>
 
@@ -59,7 +56,7 @@ export default function Settings() {
         <SliderItem
           label="Synth"
           func={(e) => setPianoVolume(e)}
-          val={pianoSound ? pianoVolume : 0}
+          val={pianoVolume}
         />
         <SliderItem
           label="Suggestion"

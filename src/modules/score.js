@@ -6,48 +6,57 @@ export default function Score() {
   const activeSuggestion = useStore((state) => state.activeSuggestion);
   const score = useStore((state) => state.score);
   const setScore = useStore((state) => state.setScore);
-  const checked = useStore((state) => state.checked);
-  const setChecked = useStore((state) => state.setChecked);
-  const numberOfPlayedNotes = useStore((state) => state.numberOfPlayedNotes);
+  const activeNotes = useStore((state) => state.activeNotes);
+  const scrollMode = useStore((state) => state.scrollMode);
+  const beat = useStore((state) => state.beat);
 
-  const [correct, setCorrect] = useState([]);
+  const [correct, setCorrect] = useState(0);
   const [wrong, setWrong] = useState(0);
-
-  //console.log("score module");
+  const [checked, setChecked] = useState([]);
+  const [lastSuggestionLength, setLastSuggestionLength] = useState(0);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
-    setCorrect([]);
     setWrong(0);
-    setChecked(false);
-  }, [activeSuggestion]);
+    setChecked([]);
+    setCorrect(0);
+    setDone(false);
+    if (activeSuggestion.intervalles) {
+      setLastSuggestionLength(activeSuggestion.intervalles.length);
+    }
+  }, [activeSuggestion, scrollMode]);
 
   useEffect(() => {
-    if (noteOn && activeSuggestion.intervalles.includes(noteOn % 12)) {
-      if (!correct.includes(noteOn)) {
-        setCorrect([...correct, noteOn]);
-      }
-    } else if (noteOn) {
-      setWrong(wrong + 1);
-    }
-  }, [noteOn, activeSuggestion]);
+    if (!activeSuggestion.intervalles) return;
+
+    if (
+      activeSuggestion.intervalles.includes(noteOn % 12) &&
+      !checked.includes(noteOn % 12)
+    ) {
+      setCorrect(correct + 1);
+      checked.push(noteOn % 12);
+      console.log(checked);
+    } else if (activeSuggestion.intervalles.includes(noteOn % 12)) {
+    } else if (noteOn !== undefined) setWrong(wrong + 1);
+  }, [noteOn]);
 
   useEffect(() => {
     if (
-      correct.length === activeSuggestion.intervalles?.length &&
-      !checked &&
-      numberOfPlayedNotes === 0
+      checked.length === lastSuggestionLength &&
+      checked.length > 0 &&
+      activeNotes.size === 0 &&
+      !done
     ) {
+      setDone(true);
       setScore(score + 1);
-      setChecked(true);
     }
-  }, [numberOfPlayedNotes, score]);
+  }, [activeNotes]);
 
   return (
     <>
       <h3 className="green">correct</h3>
       <h2 className="green" style={{ display: "flex", gap: "5px" }}>
-        <p>{correct.length}</p> <p>/</p>{" "}
-        <p>{activeSuggestion.intervalles?.length}</p>
+        <p>{correct}</p> <p>/</p> <p>{activeSuggestion.intervalles?.length}</p>
       </h2>
       <h3 className="red">wrong</h3>
       <h2 className="red">{wrong}</h2>

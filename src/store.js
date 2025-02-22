@@ -1,253 +1,277 @@
 // src/store/useStore.js
 import { create } from "zustand";
+import { chords, scales } from "./modules/arrays";
 
-const useStore = create((set) => ({
-  noteOn: undefined,
-  noteOff: undefined,
-  activeNotes: new Set(), // Utilisation d'un Set pour suivre les notes actives
-  numberOfPlayedNotes: 0,
+const LOCAL_STORAGE_KEY = "savedSuggestions";
 
-  addNote: (note) =>
-    set((state) => {
-      if (state.activeNotes.has(note)) return state; // Évite les doublons
-      const newActiveNotes = new Set(state.activeNotes);
-      newActiveNotes.add(note);
-      return {
-        activeNotes: newActiveNotes,
-        numberOfPlayedNotes: newActiveNotes.size, // Mise à jour du nombre
-        noteOn: note,
-        noteOff: undefined,
-      };
-    }),
+const useStore = create((set) => {
+  const savedState = localStorage.getItem(LOCAL_STORAGE_KEY);
+  const initialState = savedState ? JSON.parse(savedState) : {};
 
-  removeNote: (note) =>
-    set((state) => {
-      if (!state.activeNotes.has(note)) return state; // Ignore les notes déjà enlevées
-      const newActiveNotes = new Set(state.activeNotes);
-      newActiveNotes.delete(note);
-      return {
-        activeNotes: newActiveNotes,
-        numberOfPlayedNotes: newActiveNotes.size, // Mise à jour du nombre
-        noteOff: note,
-        noteOn: undefined,
-      };
-    }),
-  pianoSound: false,
-  pianoVolume: 0,
-  setPianoVolume: (num) =>
-    set((state) => {
-      if (state.pianoVolume === num) return state;
-      if (num === 0) {
-        return { pianoVolume: num, pianoSound: false };
-      } else {
-        return { pianoVolume: num, pianoSound: true };
-      }
-    }),
+  return {
+    noteOn: undefined,
+    noteOff: undefined,
+    activeNotes: new Set(), // Utilisation d'un Set pour suivre les notes actives
 
-  setPianoSound: (bool) =>
-    set((state) => {
-      if (state.pianoSound === bool) return state;
-      if (bool && state.pianoVolume === 0) {
-        return { pianoSound: bool };
-      }
-      return { pianoSound: bool };
-    }),
+    addNote: (note) =>
+      set((state) => {
+        if (state.activeNotes.has(note)) return state; // Évite les doublons
+        const newActiveNotes = new Set(state.activeNotes);
+        newActiveNotes.add(note);
+        console.log("ee");
+        return {
+          activeNotes: newActiveNotes,
+          noteOn: note,
+          noteOff: undefined,
+        };
+      }),
 
-  metronomeVolume: 80,
-  setMetronomeVolume: (num) =>
-    set((state) => {
-      if (state.metronomeVolume === num) return state;
-      return { metronomeVolume: num };
-    }),
+    removeNote: (note) =>
+      set((state) => {
+        if (!state.activeNotes.has(note)) return state; // Ignore les notes déjà enlevées
+        const newActiveNotes = new Set(state.activeNotes);
+        newActiveNotes.delete(note);
+        return {
+          activeNotes: newActiveNotes,
+          noteOff: note,
+          noteOn: undefined,
+        };
+      }),
 
-  suggestionVolume: 80,
-  setSuggestionVolume: (num) =>
-    set((state) => {
-      if (state.suggestionVolume === num) return state;
-      return { suggestionVolume: num };
-    }),
+    activeSuggestion: [],
+    nextSuggestion: [],
+    suggestion: [],
+    passedSuggestion: [],
+    setSuggestion: (array) =>
+      set((state) => {
+        return {
+          passedSuggestion: state.activeSuggestion,
+          activeSuggestion: state.nextSuggestion,
+          nextSuggestion: state.suggestion,
+          suggestion: array,
+        };
+      }),
 
-  victoryVolume: 80,
-  setVictoryVolume: (num) =>
-    set((state) => {
-      if (state.victoryVolume === num) return state;
-      return { victoryVolume: num };
-    }),
+    play: false,
+    setPlay: (bool) =>
+      set((state) => {
+        if (state.play === bool) return state;
+        return { play: bool };
+      }),
 
-  mode: 1,
-  setMode: (num) =>
-    set((state) => {
-      if (state.mode === num) return state;
-      return {
-        mode: num,
-      };
-    }),
+    beat: 0,
+    setBeat: (num) =>
+      set((state) => {
+        if (state.beat === num) return state;
+        return { beat: num };
+      }),
 
-  activeSuggestion: [],
-  nextSuggestion: [],
-  suggestion: [],
-  passedSuggestion: [],
-  setSuggestion: (array) =>
-    set((state) => {
-      return {
-        passedSuggestion: state.activeSuggestion,
-        activeSuggestion: state.nextSuggestion,
-        nextSuggestion: state.suggestion,
-        suggestion: array,
-      };
-    }),
+    settingsMenu: false,
+    setSettingsMenu: (bool) =>
+      set((state) => {
+        if (state.settingsMenu === bool) return state; // Corrigé ici
+        return { settingsMenu: bool }; // Met à jour correctement l'état
+      }),
 
-  bpm: 200,
-  setBpm: (num) =>
-    set((state) => {
-      if (state.bpm === num) return state;
-      return { bpm: num };
-    }),
+    score: 0,
+    setScore: (num) =>
+      set((state) => {
+        if (state.score === num) return state;
+        return { score: num };
+      }),
 
-  play: false,
-  setPlay: (bool) =>
-    set((state) => {
-      if (state.play === bool) return state;
-      return { play: bool };
-    }),
+    ///////////////////////////////////////////////////////////////////////////////////////////
 
-  beat: 0,
-  setBeat: (num) =>
-    set((state) => {
-      if (state.beat === num) return state;
-      return { beat: num };
-    }),
+    pianoVolume: initialState.pianoVolume || 80,
+    setPianoVolume: (num) =>
+      set((state) => {
+        if (state.pianoVolume === num) return state;
+        if (num === 0) {
+          return { pianoVolume: num };
+        } else {
+          return { pianoVolume: num };
+        }
+      }),
+    metronomeVolume: initialState.metronomeVolume || 80,
+    setMetronomeVolume: (num) =>
+      set((state) => {
+        if (state.metronomeVolume === num) return state;
+        return { metronomeVolume: num };
+      }),
 
-  signature: 4,
-  setSignature: (num) =>
-    set((state) => {
-      if (state.signature === num) return state;
-      return { signature: num };
-    }),
+    suggestionVolume: initialState.suggestionVolume || 80,
+    setSuggestionVolume: (num) =>
+      set((state) => {
+        if (state.suggestionVolume === num) return state;
+        return { suggestionVolume: num };
+      }),
 
-  scrollMode: false,
-  setScrollMode: (bool) =>
-    set((state) => {
-      if (state.scrollMode === bool) return state;
-      return { scrollMode: bool };
-    }),
+    victoryVolume: initialState.victoryVolume || 80,
+    setVictoryVolume: (num) =>
+      set((state) => {
+        if (state.victoryVolume === num) return state;
+        return { victoryVolume: num };
+      }),
 
-  score: 0,
-  setScore: (num) =>
-    set((state) => {
-      if (state.score === num) return state;
-      return { score: num };
-    }),
+    mode: initialState.mode || 1,
+    setMode: (num) =>
+      set((state) => {
+        if (state.mode === num) return state;
+        return {
+          mode: num,
+        };
+      }),
 
-  checked: false,
-  setChecked: (bool) =>
-    set((state) => {
-      if (state.checked === bool) return state;
-      return { checked: bool };
-    }),
+    bpm: initialState.bpm || 100,
+    setBpm: (num) =>
+      set((state) => {
+        if (state.bpm === num) return state;
+        return { bpm: num };
+      }),
 
-  settingsMenu: false,
-  setSettingsMenu: (bool) =>
-    set((state) => {
-      if (state.settingsMenu === bool) return state; // Corrigé ici
-      return { settingsMenu: bool }; // Met à jour correctement l'état
-    }),
+    signature: initialState.signature || 4,
+    setSignature: (num) =>
+      set((state) => {
+        if (state.signature === num) return state;
+        return { signature: num };
+      }),
 
-  displayPartition: true,
-  setDisplayPartition: (bool) =>
-    set((state) => {
-      if (state.displayPartition === bool) return state; // Corrigé ici
-      return { displayPartition: bool }; // Met à jour correctement l'état
-    }),
+    scrollMode: initialState.scrollMode || false,
+    setScrollMode: (bool) =>
+      set((state) => {
+        if (state.scrollMode === bool) return state;
+        return { scrollMode: bool };
+      }),
 
-  themeChoice: 1,
-  setThemeChoice: (num) =>
-    set((state) => {
-      if (state.themeChoice === num) return state;
-      console.log("theme choice:", num);
-      return { themeChoice: num };
-    }),
+    displayPartition: initialState.displayPartition || true,
+    setDisplayPartition: (bool) =>
+      set((state) => {
+        if (state.displayPartition === bool) return state; // Corrigé ici
+        return { displayPartition: bool }; // Met à jour correctement l'état
+      }),
 
-  lastNotesListStore: [0],
-  notesListStore: [0, 2, 4, 5, 7, 9, 11],
+    themeChoice: initialState.themeChoice || 1,
+    setThemeChoice: (num) =>
+      set((state) => {
+        if (state.themeChoice === num) return state;
+        console.log("theme choice:", num);
+        return { themeChoice: num };
+      }),
 
-  setNotesListStore: (array) =>
-    set((state) => {
-      if (JSON.stringify(state.notesListStore) === JSON.stringify(array))
-        return state;
-      if (array.length <= 0) {
+    lastNotesListStore: initialState.lastNotesListStore || [0],
+    notesListStore: initialState.notesListStore || [0, 2, 4, 5, 7, 9, 11],
+
+    setNotesListStore: (array) =>
+      set((state) => {
+        if (JSON.stringify(state.notesListStore) === JSON.stringify(array))
+          return state;
+        if (array.length <= 0) {
+          return {
+            lastNotesListStore: state.notesListStore,
+            notesListStore: [0],
+          };
+        }
         return {
           lastNotesListStore: state.notesListStore,
-          notesListStore: [0],
+          notesListStore: array,
         };
-      }
-      return {
-        lastNotesListStore: state.notesListStore,
-        notesListStore: array,
-      };
-    }),
+      }),
 
-  pushNoteListStore: (string) =>
-    set((state) => {
-      if (state.notesListStore.includes(string)) return state;
+    pushNoteListStore: (string) =>
+      set((state) => {
+        if (state.notesListStore.includes(string)) return state;
 
-      return { notesListStore: [...state.notesListStore, string] };
-    }),
+        return { notesListStore: [...state.notesListStore, string] };
+      }),
 
-  filterNoteListStore: (string) =>
-    set((state) => {
-      if (!state.notesListStore.includes(string)) return state;
-      if (state.notesListStore.length <= 1) {
+    filterNoteListStore: (string) =>
+      set((state) => {
+        if (!state.notesListStore.includes(string)) return state;
+        if (state.notesListStore.length <= 1) {
+          return {
+            lastNotesListStore: state.notesListStore,
+            notesListStore: [0],
+          };
+        }
         return {
-          lastNotesListStore: state.notesListStore,
-          notesListStore: [0],
+          notesListStore: state.notesListStore.filter(
+            (note) => note !== string
+          ),
         };
-      }
-      return {
-        notesListStore: state.notesListStore.filter((note) => note !== string),
-      };
-    }),
+      }),
+    lastScalesListStore: initialState.lastScalesListStore || [0],
+    scalesListStore: initialState.scalesListStore || [0, 1, 4, 5],
+    notesMax: initialState.notesMax || 4,
+    setNotesMax: (num) =>
+      set((state) => {
+        if (state.notesMax === num || num > 7) return state;
+        let newArray = state.scalesListStore;
+        if (state.mode === 1)
+          newArray = state.scalesListStore.filter(
+            (v) => chords[v].intervalles.length <= state.notesMax
+          );
+        return {
+          notesMax: num,
+          scalesListStore: newArray,
+          lastScalesListStore: state.scalesListStore,
+        };
+      }),
 
-  lastScalesListStore: [0],
-  scalesListStore: [0, 1, 4, 5],
-
-  setScalesListStore: (array) =>
-    set((state) => {
-      if (JSON.stringify(state.scalesListStore) === JSON.stringify(array))
-        return state;
-      if (array.length <= 0) {
+    setScalesListStore: (array) =>
+      set((state) => {
+        if (JSON.stringify(state.scalesListStore) === JSON.stringify(array))
+          return state;
+        let newArray = array;
+        if (state.mode === 1)
+          newArray = array.filter(
+            (v) => chords[v].intervalles.length <= state.notesMax
+          );
+        if (newArray.length <= 0) {
+          return {
+            lastScalesListStore: state.scalesListStore,
+            scalesListStore: [0],
+          };
+        }
         return {
           lastScalesListStore: state.scalesListStore,
-          scalesListStore: [0],
+          scalesListStore: newArray,
         };
-      }
-      return {
-        lastScalesListStore: state.scalesListStore,
-        scalesListStore: array,
-      };
-    }),
+      }),
 
-  pushScalesListStore: (string) =>
-    set((state) => {
-      if (state.scalesListStore.includes(string)) return state;
-      return { scalesListStore: [...state.scalesListStore, string] };
-    }),
+    pushScalesListStore: (num) =>
+      set((state) => {
+        if (state.scalesListStore.includes(num)) return state;
+        if (
+          state.mode === 1 &&
+          chords[num].intervalles.length > state.notesMax
+        ) {
+          console.log("oeoe", chords[num].intervalles.length, state.notesMax);
+          return state;
+        }
+        return { scalesListStore: [...state.scalesListStore, num] };
+      }),
 
-  filterScalesListStore: (string) =>
-    set((state) => {
-      if (!state.scalesListStore.includes(string)) return state;
-      if (state.scalesListStore.length <= 1) {
+    filterScalesListStore: (num) =>
+      set((state) => {
+        if (!state.scalesListStore.includes(num)) return state;
+        if (state.scalesListStore.length <= 1) {
+          return {
+            lastScalesListStore: state.scalesListStore,
+            scalesListStore: [0],
+          };
+        }
         return {
-          lastScalesListStore: state.scalesListStore,
-          scalesListStore: [0],
+          scalesListStore: state.scalesListStore.filter((note) => note !== num),
         };
-      }
-      return {
-        scalesListStore: state.scalesListStore.filter(
-          (note) => note !== string
-        ),
-      };
-    }),
-}));
+      }),
+
+    displayPiano: initialState.displayPiano || true,
+    setDisplayPiano: (bool) =>
+      set((state) => {
+        if (state.displayPiano === bool) return state;
+        return { displayPiano: bool };
+      }),
+  };
+});
 
 export default useStore;

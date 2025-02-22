@@ -6,6 +6,8 @@ import { FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 export default function PianoComponent() {
   const noteOn = useStore((state) => state.noteOn);
   const noteOff = useStore((state) => state.noteOff);
+  const addNote = useStore((state) => state.addNote);
+  const removeNote = useStore((state) => state.removeNote);
   const activeSuggestion = useStore((state) => state.activeSuggestion);
   const pianoSound = useStore((state) => state.pianoSound);
   const setPianoSound = useStore((state) => state.setPianoSound);
@@ -74,41 +76,33 @@ export default function PianoComponent() {
   }, [activeSuggestion]);
 
   return (
-    <div
-      className="fullKeyboardContainer"
-      onClick={() => {
-        setPianoSound(!pianoSound);
-      }}
-    >
-      <div className="boxShadow"></div>
-      <div className="square">
-        {pianoSound ? (
-          <FaVolumeUp className="volumeUp" />
-        ) : (
-          <FaVolumeMute className="volumeDown" />
-        )}
-      </div>
+    <div className="fullKeyboardContainer">
       {Array.from({ length: nmbrOctaves }).map((_, index) => (
         <div key={index} className="octaveContainer">
           <div className="whiteKeyContainer">
-            <div className={`whiteKey key-0 index-${0 + 12 * index}`}></div>
-
-            <div className={`whiteKey key-2 index-${2 + 12 * index}`}></div>
-            <div className={`whiteKey key-4 index-${4 + 12 * index}`}></div>
-            <div className={`whiteKey key-5 index-${5 + 12 * index}`}></div>
-            <div className={`whiteKey key-7 index-${7 + 12 * index}`}></div>
-            <div className={`whiteKey key-9 index-${9 + 12 * index}`}></div>
-            <div className={`whiteKey key-11 index-${11 + 12 * index}`}></div>
+            {[0, 2, 4, 5, 7, 9, 11].map((note) => (
+              <div
+                key={note}
+                className={`whiteKey key-${note} index-${note + 12 * index}`}
+              ></div>
+            ))}
           </div>
 
           <div className="blackKeyContainer">
             <div className="empty1"></div>
-            <div className={`blackKey key-1 index-${1 + 12 * index}`}></div>
-            <div className={`blackKey key-3 index-${3 + 12 * index}`}></div>
+            {[1, 3].map((note) => (
+              <div
+                key={note}
+                className={`blackKey key-${note} index-${note + 12 * index}`}
+              ></div>
+            ))}
             <div className="empty2"></div>
-            <div className={`blackKey key-6 index-${6 + 12 * index}`}></div>
-            <div className={`blackKey key-8 index-${8 + 12 * index}`}></div>
-            <div className={`blackKey key-10 index-${10 + 12 * index}`}></div>
+            {[6, 8, 10].map((note) => (
+              <div
+                key={note}
+                className={`blackKey key-${note} index-${note + 12 * index}`}
+              ></div>
+            ))}
           </div>
         </div>
       ))}

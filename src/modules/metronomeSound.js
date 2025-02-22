@@ -8,36 +8,56 @@ export default function MetronomeSound() {
   const metronomeVolume = useStore((state) => state.metronomeVolume);
 
   const synthRef = useRef(null);
-
-  //console.log("metronome sound module");
+  const gainRef = useRef(null);
 
   useEffect(() => {
-    synthRef.current = new Tone.PolySynth({
+    // Création d'un gain pour gérer le volume
+    gainRef.current = new Tone.Gain(
+      Tone.dbToGain(metronomeVolume - 80)
+    ).toDestination();
+
+    synthRef.current = new Tone.NoiseSynth({
+      noise: {
+        type: "white", // "white", "pink", "brown"
+      },
       envelope: {
         attack: 0.01,
-        decay: 0.05,
+        decay: 0.2,
         sustain: 0,
-        release: 0,
+        release: 0.1,
       },
-    }).toDestination();
+    }).connect(gainRef.current);
 
     return () => {
-      synthRef.current.dispose();
-      synthRef.current = null;
+      if (synthRef.current) {
+        synthRef.current.dispose();
+        synthRef.current = null;
+      }
+      if (gainRef.current) {
+        gainRef.current.dispose();
+        gainRef.current = null;
+      }
     };
   }, []);
 
   useEffect(() => {
-    if (beat === 0 && play) {
-      synthRef.current.triggerAttackRelease("C5", "16n");
-    } else if (play) {
-      synthRef.current.triggerAttackRelease("C4", "16n");
+    if (synthRef.current && play) {
+      if (beat === 0) {
+        synthRef.current.noise.type = "white";
+        gainRef.current.gain.value = Tone.dbToGain(metronomeVolume - 80);
+      } else {
+        synthRef.current.noise.type = "pink";
+        gainRef.current.gain.value = Tone.dbToGain(metronomeVolume - 75);
+      }
+
+      // Déclenchement du son
+      synthRef.current.triggerAttackRelease("16n");
     }
   }, [beat, play]);
 
   useEffect(() => {
-    if (synthRef.current) {
-      synthRef.current.volume.value = metronomeVolume - 80;
+    if (gainRef.current) {
+      gainRef.current.gain.value = Tone.dbToGain(metronomeVolume - 80);
     }
   }, [metronomeVolume]);
 

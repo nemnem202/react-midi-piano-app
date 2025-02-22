@@ -6,35 +6,33 @@ export default function NotesSuggestion() {
   const mode = useStore((state) => state.mode);
   const beat = useStore((state) => state.beat);
   const scrollMode = useStore((state) => state.scrollMode);
-  const checked = useStore((state) => state.checked);
   const score = useStore((state) => state.score);
   const setSuggestion = useStore((state) => state.setSuggestion);
   const notesListStore = useStore((state) => state.notesListStore);
   const scalesListStore = useStore((state) => state.scalesListStore);
-  //console.log("notesSuggestion module");
-
-  useEffect(() => {
-    console.log("scalesListStore: ", scalesListStore);
-  }, [scalesListStore]);
+  const play = useStore((state) => state.play);
+  const notesMax = useStore((state) => state.notesMax);
 
   useEffect(() => {
     for (let i = 0; i < 4; i++) {
-      let rand;
-      do {
-        rand = setRandom(mode, notesListStore, scalesListStore);
-      } while (!rand.nom);
+      const rand = setRandom(mode, notesListStore, scalesListStore, notesMax);
+
       setSuggestion(rand);
     }
-  }, [mode, notesListStore, scalesListStore]);
+  }, [mode, notesListStore, scalesListStore, notesMax]);
 
   useEffect(() => {
-    if ((beat === 0 && !checked && !scrollMode) || (scrollMode && checked)) {
-      let rand;
-      do {
-        rand = setRandom(mode, notesListStore, scalesListStore);
-      } while (!rand.nom);
+    if (beat === 0 && play) {
+      const rand = setRandom(mode, notesListStore, scalesListStore, notesMax);
       setSuggestion(rand);
     }
-  }, [beat, score, scrollMode, checked, mode, notesListStore, scalesListStore]); // L'effet se déclenche lorsque `beat` ou `score` changent.
+  }, [beat, scrollMode, mode, notesListStore, scalesListStore, notesMax]);
+
+  useEffect(() => {
+    if (scrollMode) {
+      const rand = setRandom(mode, notesListStore, scalesListStore, notesMax);
+      setSuggestion(rand);
+    }
+  }, [mode, notesListStore, scalesListStore, score, notesMax]);
   return null;
 }
