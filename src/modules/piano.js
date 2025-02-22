@@ -64,19 +64,17 @@ export default function PianoComponent() {
           if (actives) {
             actives.classList.add("active");
           }
-          const root = document.querySelector(
-            `.index-${activeSuggestion.intervalles[0] + 12 * i}`
-          );
-          if (root) {
-            root.classList.add("root");
+          if (actives && key === activeSuggestion.root) {
+            actives.classList.add("root");
           }
         });
       }
     }
+    console.log(activeSuggestion);
   }, [activeSuggestion]);
 
   return (
-    <div className="fullKeyboardContainer">
+    <>
       {Array.from({ length: nmbrOctaves }).map((_, index) => (
         <div key={index} className="octaveContainer">
           <div className="whiteKeyContainer">
@@ -106,6 +104,6 @@ export default function PianoComponent() {
           </div>
         </div>
       ))}
-    </div>
+    </>
   );
 }

@@ -179,18 +179,18 @@ export default function ChordScalesSetting() {
       <div className={mode === 3 ? "disab setNotes" : " setNotes"}>
         Root note of the scale
         <div style={{ display: "flex", alignItems: "center" }}>
-          <span
-            className={notesListStoreIsComplete(notesListStore) ? "red" : ""}
-          >
+          <span className={notesListStore.length === 12 ? "red" : ""}>
             Random Notes
           </span>{" "}
           <Switch
             onClick={() => {
-              notesListStoreIsComplete(notesListStore)
+              notesListStore.length === 12 && lastNotesListStore.length !== 12
                 ? setNotesListStore(lastNotesListStore)
+                : notesListStore.length === 12
+                ? setNotesListStore([0])
                 : setNotesListStore([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
             }}
-            bool={notesListStoreIsComplete(notesListStore)}
+            bool={notesListStore.length === 12}
           />
         </div>
       </div>
@@ -320,8 +320,11 @@ export default function ChordScalesSetting() {
           </span>{" "}
           <Switch
             onClick={() => {
-              scalesListStore.length === scales.length
+              scalesListStore.length === scales.length &&
+              lastScalesListStore.length !== scales.length
                 ? setScalesListStore(lastScalesListStore)
+                : scalesListStore.length === scales.length
+                ? setScalesListStore([0])
                 : setScalesListStore(
                     Array.from({ length: scales.length }, (_, i) => i)
                   );
@@ -364,14 +367,3 @@ export default function ChordScalesSetting() {
     </>
   );
 }
-
-const notesListStoreIsComplete = (array) => {
-  if (
-    JSON.stringify(array) ===
-    JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-};

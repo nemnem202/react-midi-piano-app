@@ -113,15 +113,6 @@ const useStore = create((set) => {
         return { victoryVolume: num };
       }),
 
-    mode: initialState.mode || 1,
-    setMode: (num) =>
-      set((state) => {
-        if (state.mode === num) return state;
-        return {
-          mode: num,
-        };
-      }),
-
     bpm: initialState.bpm || 100,
     setBpm: (num) =>
       set((state) => {
@@ -202,14 +193,46 @@ const useStore = create((set) => {
     lastScalesListStore: initialState.lastScalesListStore || [0],
     scalesListStore: initialState.scalesListStore || [0, 1, 4, 5],
     notesMax: initialState.notesMax || 4,
-    setNotesMax: (num) =>
+    mode: initialState.mode || 1,
+
+    setMode: (num) =>
       set((state) => {
-        if (state.notesMax === num || num > 7) return state;
+        if (state.mode === num) return state;
+
         let newArray = state.scalesListStore;
-        if (state.mode === 1)
+
+        if (num === 1) {
           newArray = state.scalesListStore.filter(
             (v) => chords[v].intervalles.length <= state.notesMax
           );
+        }
+
+        if (newArray.length <= 0) {
+          return {
+            lastScalesListStore: state.scalesListStore,
+            scalesListStore: [0],
+          };
+        }
+
+        return {
+          mode: num,
+          scalesListStore: newArray,
+          lastScalesListStore: state.scalesListStore,
+        };
+      }),
+
+    setNotesMax: (num) =>
+      set((state) => {
+        if (state.notesMax === num || num > 7) return state;
+        let newArray = state.scalesListStore.filter(
+          (v) => chords[v].intervalles.length <= num
+        );
+        if (newArray.length <= 0) {
+          return {
+            lastScalesListStore: state.scalesListStore,
+            scalesListStore: [0],
+          };
+        }
         return {
           notesMax: num,
           scalesListStore: newArray,

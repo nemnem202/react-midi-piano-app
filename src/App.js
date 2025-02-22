@@ -108,7 +108,16 @@ function App() {
             </div>
           </div>
         </div>
-        {displayPiano ? <PianoComponent /> : ""}
+        <div
+          style={{ height: "200px" }}
+          className={
+            displayPiano
+              ? "fullKeyboardContainer"
+              : "fullKeyboardContainer borderTransparent"
+          }
+        >
+          {displayPiano ? <PianoComponent /> : ""}
+        </div>
       </div>
       <div className={`Settings ${settingsMenu ? "open" : ""}`}>
         {" "}

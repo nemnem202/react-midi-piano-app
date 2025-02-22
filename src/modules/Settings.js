@@ -4,6 +4,7 @@ import useStore from "../store";
 import Slider from "@mui/material/Slider";
 import ScrollMode from "./scrollMode";
 import ChordScalesSetting from "./chordScalesSetting";
+import Reset from "./reset";
 
 export default function Settings() {
   const displayPartition = useStore((state) => state.displayPartition);
@@ -26,7 +27,10 @@ export default function Settings() {
   const setThemeChoice = useStore((state) => state.setThemeChoice);
   return (
     <div className="settingsContainer">
-      <h1>Settings</h1>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <h1>Settings</h1>
+        <Reset />
+      </div>
 
       <ChordScalesSetting />
 

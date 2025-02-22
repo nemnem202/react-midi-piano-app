@@ -6,8 +6,8 @@ export default function setRandom(mode, notesList, scalesList, max) {
     let scaleOrChordArray;
 
     if (mode === 1) {
-      scaleOrChordArray = chords.filter(
-        (chord) => chord.intervalles.length <= max
+      scaleOrChordArray = chords.filter((_, index) =>
+        scalesList.includes(index)
       );
     } else if (mode === 2) {
       scaleOrChordArray = scales;
@@ -15,13 +15,15 @@ export default function setRandom(mode, notesList, scalesList, max) {
 
     const randVal1 = Math.floor(Math.random() * notesList.length);
     const randomNote = notesList[randVal1];
-    const randVal2 = Math.floor(Math.random() * scalesList.length);
-    const randomScaleOrChord = scaleOrChordArray[scalesList[randVal2]];
+    const randVal2 = Math.floor(Math.random() * scaleOrChordArray.length);
+
+    const randomScaleOrChord = scaleOrChordArray[randVal2];
     return {
       nom: midiToNote(randomNote) + randomScaleOrChord.nom,
       intervalles: randomScaleOrChord.intervalles.map(
         (intervall) => (intervall + randomNote) % 12
       ),
+      root: randomNote,
     };
   } else {
     let chordName = [];
@@ -45,10 +47,12 @@ export default function setRandom(mode, notesList, scalesList, max) {
 
       chordName = Tonal.Chord.detect(chordNotes);
     } while (chordName.length === 0);
-
+    const root = Tonal.Chord.get(chordName[0]).tonic;
+    const midiRoot = Tonal.Midi.toMidi(`${root}0`) % 12;
     return {
       nom: chordName[0],
       intervalles: chord,
+      root: midiRoot,
     };
   }
 }

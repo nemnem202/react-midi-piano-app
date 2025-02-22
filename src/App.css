@@ -241,6 +241,7 @@ textarea::selection {
   justify-content: space-between;
   align-items: center;
   padding: 1% 5% 0% 5%;
+  height: 50px;
 }
 
 .BpmSignature {
@@ -317,4 +318,17 @@ textarea::selection {
 
 .scoreContainer {
   grid-column: 3;
+}
+
+.fullKeyboardContainer {
+  display: flex;
+  background: var(--gradient);
+  border: 1px solid black;
+  width: fit-content;
+  margin: 0px auto 5%;
+  position: relative;
+}
+
+.borderTransparent {
+  border: 1px solid transparent;
 }
