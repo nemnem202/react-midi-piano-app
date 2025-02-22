@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/react-midi-piano-app/static/css/main.109beffe.css",
-    "main.js": "/react-midi-piano-app/static/js/main.c24e96ad.js",
+    "main.css": "/react-midi-piano-app/static/css/main.41ea7c73.css",
+    "main.js": "/react-midi-piano-app/static/js/main.bd349a55.js",
     "static/js/488.8654f66f.chunk.js": "/react-midi-piano-app/static/js/488.8654f66f.chunk.js",
     "index.html": "/react-midi-piano-app/index.html",
     "static/media/circle.svg": "/react-midi-piano-app/static/media/circle.0ba4d4ff9fdd303a1872.svg",
-    "main.109beffe.css.map": "/react-midi-piano-app/static/css/main.109beffe.css.map",
-    "main.c24e96ad.js.map": "/react-midi-piano-app/static/js/main.c24e96ad.js.map",
+    "main.41ea7c73.css.map": "/react-midi-piano-app/static/css/main.41ea7c73.css.map",
+    "main.bd349a55.js.map": "/react-midi-piano-app/static/js/main.bd349a55.js.map",
     "488.8654f66f.chunk.js.map": "/react-midi-piano-app/static/js/488.8654f66f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.109beffe.css",
-    "static/js/main.c24e96ad.js"
+    "static/css/main.41ea7c73.css",
+    "static/js/main.bd349a55.js"
   ]
 }
