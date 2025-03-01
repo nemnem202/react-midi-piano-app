@@ -67,18 +67,9 @@ html,
 body {
   background-color: var(--background);
   color: var(--foreground);
-  overflow: hidden;
-}
-
-* {
-  cursor: url("../public/circle.svg") 10 10, auto;
-}
-
-body {
   font-family: Arial, Helvetica, sans-serif;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+  cursor: url("../public/circle.svg") 10 10, auto;
+  overflow: hidden;
 }
 
 .AppSettings {
@@ -151,7 +142,7 @@ body {
 }
 
 .Settings {
-  width: 50vh;
+  width: max-content;
   height: 100vh;
   background: var(--gradient);
   background-size: 500%;
@@ -163,20 +154,41 @@ body {
   transform: translateX(-50vh);
   transition: transform ease 0.3s, box-shadow ease 0.3s, opacity ease 0.3s;
   opacity: 0;
+  overflow-y: auto;
+}
+
+/* La barre de défilement */
+.Settings::-webkit-scrollbar {
+  width: 3px; /* Largeur de la barre */
+  height: 8px; /* Hauteur pour le défilement horizontal */
+}
+
+/* Le "pouce" de la barre (partie déplaçable) */
+.Settings::-webkit-scrollbar-thumb {
+  background-color: var(--color5); /* Couleur du pouce */
+  border-radius: 4px; /* Bordure arrondie */
+}
+
+/* Le fond de la barre (partie statique) */
+.Settings::-webkit-scrollbar-track {
+  background: var(--background); /* Couleur de fond de la barre */
+}
+
+/* Quand on survole la barre de défilement */
+.Settings::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Couleur du pouce au survol */
 }
 
 .settingsIcon {
-  height: 33px;
-  width: 33px;
-  position: absolute;
-  margin: 1% 7%;
+  width: 100%;
+  height: 100%;
   z-index: 9;
   transform: translateX(0vh) rotate(0deg);
   transition: transform ease-out 0.3s;
 }
 
 .settingsIcon.open {
-  transform: translateX(40vh) rotate(180deg);
+  transform: translateX(330px) rotate(180deg);
 }
 
 .Settings.open {
@@ -189,11 +201,9 @@ button,
 input,
 textarea,
 select {
-  color: inherit;
-  border: 1px solid var(--color5);
+  color: var(--foreground);
   background: none;
-  font: inherit;
-  width: fit-content;
+  width: max-content;
   padding: 5px;
   font-weight: 600;
   border-radius: 3px;
@@ -201,6 +211,10 @@ select {
   outline: none;
   appearance: none;
   margin: 0px 8px;
+  overflow: hidden;
+  -webkit-box-shadow: 0px 0px 2px 1px var(--color5op);
+  -moz-box-shadow: 0px 0px 2px 1px var(--color5op);
+  box-shadow: 0px 0px 2px 1px var(--color5op);
 }
 
 input[type="number"] {
@@ -215,6 +229,10 @@ button:hover,
 .backGroundRed {
   background-color: var(--color5);
   cursor: none;
+
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
 }
 
 input::-webkit-outer-spin-button,
@@ -226,6 +244,57 @@ input::-webkit-inner-spin-button {
 input::selection,
 textarea::selection {
   background-color: var(--background);
+}
+*/
+
+/* CSS */
+.button-64 {
+  align-items: center;
+  background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  border: 0;
+  border-radius: 8px;
+  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  box-sizing: border-box;
+  color: #ffffff;
+  display: flex;
+  font-family: Phantomsans, sans-serif;
+  font-size: 20px;
+  justify-content: center;
+  line-height: 1em;
+  max-width: 100%;
+  min-width: 140px;
+  padding: 3px;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.button-64:active,
+.button-64:hover {
+  outline: 0;
+}
+
+.button-64 span {
+  background-color: rgb(5, 6, 45);
+  padding: 16px 24px;
+  border-radius: 6px;
+  width: 100%;
+  height: 100%;
+  transition: 300ms;
+}
+
+.button-64:hover span {
+  background: none;
+}
+
+@media (min-width: 768px) {
+  .button-64 {
+    font-size: 24px;
+    min-width: 196px;
+  }
 }
 
 .red {
@@ -273,16 +342,15 @@ textarea::selection {
 }
 
 .partitionChordName {
-  display: flex;
-  height: 200px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: 1fr;
   padding: 0% 5%;
   justify-content: center;
   align-items: center;
 }
-
-.partitionContainer {
-  width: 200px;
-  height: 300px;
+.partitionChordName > div {
+  grid-row: 1;
 }
 
 .metroScoreGrid {
@@ -290,7 +358,6 @@ textarea::selection {
   grid-template-columns: 1fr 1fr 1fr;
   justify-content: center;
   align-items: top;
-  width: 1400px;
 }
 
 .scoreContainer {
@@ -324,8 +391,8 @@ textarea::selection {
   display: flex;
   background: var(--gradient);
   border: 1px solid black;
-  width: fit-content;
-  margin: 0px auto 5%;
+  margin: 0% 10% 5% 10%;
+  min-height: 70px;
   position: relative;
 }
 

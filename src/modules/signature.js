@@ -12,7 +12,10 @@ export default function Signature() {
       <input
         type="number"
         value={signature}
-        style={{ width: "23px" }}
+        style={{
+          width: `${signature.toString().length + 2}ch`, // Ajuste la largeur en fonction du texte
+          textAlign: "center", // Centre le texte
+        }}
         onFocus={(e) => e.target.select()}
         onClick={() => setPlay(false)}
         onChange={(e) => {

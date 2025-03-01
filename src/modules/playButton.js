@@ -33,15 +33,7 @@ export default function PlayButton() {
     }
   }, [play]);
   return (
-    <div
-      onClick={() => setPlay(!play)}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        height: "30px",
-        width: "30px",
-      }}
-    >
+    <div onClick={() => setPlay(!play)}>
       {play ? <FaStop className="red" size={30} /> : <FaPlay size={30} />}
     </div>
   );

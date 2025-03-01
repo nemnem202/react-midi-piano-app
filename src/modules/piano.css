@@ -1,7 +1,6 @@
 .octaveContainer {
   position: relative;
-  height: 200px;
-  width: 400px;
+  flex: 1;
 }
 
 .whiteKeyContainer,

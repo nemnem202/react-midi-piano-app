@@ -56,13 +56,18 @@ function App() {
         <Metronome />
         <KeyboardKeys />
         {suggestionVolume > 0 ? <SuggestionSound /> : ""}
-        <FaCog
-          className={`settingsIcon ${settingsMenu ? "open red" : ""}`}
-          onClick={() => setSettingsMenu(!settingsMenu)}
-        />
+
         {!scrollMode ? (
           <div className="PlayBpmSignature">
-            <PlayButton />
+            <div style={{ display: "flex" }}>
+              <PlayButton />
+              <FaCog
+                size={30}
+                className={`settingsIcon ${settingsMenu ? "open red" : ""}`}
+                onClick={() => setSettingsMenu(!settingsMenu)}
+              />
+            </div>
+
             <div className="BpmSignature">
               <div>
                 {" "}
@@ -93,6 +98,8 @@ function App() {
               flexDirection: "column",
               justifyContent: "space-between",
               height: "100%",
+              gridColumnStart: "2",
+              gridColumnEnd: "9",
             }}
           >
             <DisplayChordName />

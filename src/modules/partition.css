@@ -1,7 +1,7 @@
 .partitionContainer {
   display: grid;
   grid-template-rows: repeat(14, 20px);
-  grid-auto-flow: row-reverse;
+  width: 100%;
 }
 
 .line {

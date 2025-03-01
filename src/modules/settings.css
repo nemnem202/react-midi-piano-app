@@ -1,14 +1,17 @@
 .settingsContainer {
   display: flex;
+  height: 100%;
   flex-direction: column;
   justify-content: space-between;
-
-  height: 94%;
-  margin: 6%;
+  padding: 6%;
+  gap: 2%;
 }
 
-.settingsContainer div {
+.settingsContainer > div:not(.gridBlack, .gridWhite) {
   padding: 0%;
+  flex-basis: 0;
+  flex: 1;
+  flex-shrink: 1;
 }
 
 .setNotes,
