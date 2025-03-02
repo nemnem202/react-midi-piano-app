@@ -9,17 +9,15 @@ export default function MetronomeSound() {
 
   const synthRef = useRef(null);
   const gainRef = useRef(null);
+  const isPlayingRef = useRef(false); // Mutex pour éviter les exécutions simultanées
 
   useEffect(() => {
-    // Création d'un gain pour gérer le volume
     gainRef.current = new Tone.Gain(
       Tone.dbToGain(metronomeVolume - 80)
     ).toDestination();
 
     synthRef.current = new Tone.NoiseSynth({
-      noise: {
-        type: "white", // "white", "pink", "brown"
-      },
+      noise: { type: "white" },
       envelope: {
         attack: 0.01,
         decay: 0.2,
@@ -41,18 +39,23 @@ export default function MetronomeSound() {
   }, []);
 
   useEffect(() => {
-    if (synthRef.current && play) {
-      if (beat === 0) {
-        synthRef.current.noise.type = "white";
-        gainRef.current.gain.value = Tone.dbToGain(metronomeVolume - 80);
-      } else {
-        synthRef.current.noise.type = "pink";
-        gainRef.current.gain.value = Tone.dbToGain(metronomeVolume - 75);
-      }
+    if (!play || isPlayingRef.current) return; // Empêche l'exécution simultanée
 
-      // Déclenchement du son
-      synthRef.current.triggerAttackRelease("16n");
+    isPlayingRef.current = true;
+
+    if (beat === 0) {
+      synthRef.current.noise.type = "white";
+      gainRef.current.gain.value = Tone.dbToGain(metronomeVolume - 80);
+    } else {
+      synthRef.current.noise.type = "pink";
+      gainRef.current.gain.value = Tone.dbToGain(metronomeVolume - 75);
     }
+
+    synthRef.current.triggerAttackRelease("16n");
+
+    setTimeout(() => {
+      isPlayingRef.current = false; // Libère le verrou après l'exécution
+    }, 50); // 50ms de délai pour éviter un déclenchement simultané
   }, [beat, play]);
 
   useEffect(() => {

@@ -26,65 +26,81 @@ export default function Settings() {
 
   const setThemeChoice = useStore((state) => state.setThemeChoice);
   return (
-    <div className="settingsContainer">
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <h1>Settings</h1>
+    <>
+      <div
+        className="settingsTitle"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <h1 style={{ fontSize: "150%" }}>Settings</h1>
         <Reset />
       </div>
+      <div className="settingsContainer">
+        <ChordScalesSetting />
+        <div
+          style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr" }}
+        >
+          <SliderItem
+            label="Synth"
+            func={(e) => setPianoVolume(e)}
+            val={pianoVolume}
+          />
+          <SliderItem
+            label="Suggestion"
+            func={(e) => setSuggestionVolume(e)}
+            val={suggestionVolume}
+          />
+          <SliderItem
+            label="Metronome"
+            func={(e) => setMetronomeVolume(e)}
+            val={metronomeVolume}
+          />
+          <SliderItem
+            label="Victory"
+            func={(e) => setVictoryVolume(e)}
+            val={victoryVolume}
+          />
+        </div>
 
-      <ChordScalesSetting />
+        <div style={{ display: "flex" }}>
+          Theme :
+          <div className="theme1" onClick={() => setThemeChoice(1)}></div>
+          <div className="theme3" onClick={() => setThemeChoice(3)}></div>
+          <div className="theme2" onClick={() => setThemeChoice(2)}></div>
+        </div>
 
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <span className={scrollMode ? "red" : ""}>Scroll Mode</span>{" "}
-        <ScrollMode />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <span className={scrollMode ? "red" : ""}>Scroll Mode</span>{" "}
+            <ScrollMode />
+          </div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <span className={displayPartition ? "red" : ""}>Partition</span>{" "}
+            <Switch
+              onClick={() => setDisplayPartition(!displayPartition)}
+              bool={displayPartition}
+            />
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <span className={displayPiano ? "red" : ""}>Piano</span>{" "}
+            <Switch
+              onClick={() => setDisplayPiano(!displayPiano)}
+              bool={displayPiano}
+            />
+          </div>
+        </div>
       </div>
-
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <span className={displayPartition ? "red" : ""}>Partition</span>{" "}
-        <Switch
-          onClick={() => setDisplayPartition(!displayPartition)}
-          bool={displayPartition}
-        />
-      </div>
-
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <span className={displayPiano ? "red" : ""}>Piano</span>{" "}
-        <Switch
-          onClick={() => setDisplayPiano(!displayPiano)}
-          bool={displayPiano}
-        />
-      </div>
-
-      <div>Mixer</div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr" }}>
-        <SliderItem
-          label="Synth"
-          func={(e) => setPianoVolume(e)}
-          val={pianoVolume}
-        />
-        <SliderItem
-          label="Suggestion"
-          func={(e) => setSuggestionVolume(e)}
-          val={suggestionVolume}
-        />
-        <SliderItem
-          label="Metronome"
-          func={(e) => setMetronomeVolume(e)}
-          val={metronomeVolume}
-        />
-        <SliderItem
-          label="Victory"
-          func={(e) => setVictoryVolume(e)}
-          val={victoryVolume}
-        />
-      </div>
-
-      <div style={{ display: "flex" }}>
-        Theme :<div className="theme1" onClick={() => setThemeChoice(1)}></div>
-        <div className="theme3" onClick={() => setThemeChoice(3)}></div>
-        <div className="theme2" onClick={() => setThemeChoice(2)}></div>
-      </div>
-    </div>
+    </>
   );
 }
 

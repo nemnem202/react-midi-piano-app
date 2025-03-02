@@ -29,6 +29,7 @@ function App() {
   const scrollMode = useStore((state) => state.scrollMode);
   const suggestionVolume = useStore((state) => state.suggestionVolume);
   const displayPiano = useStore((state) => state.displayPiano);
+  const displayPartition = useStore((state) => state.displayPartition);
 
   const [start, setStart] = useState(true);
 
@@ -98,7 +99,7 @@ function App() {
               flexDirection: "column",
               justifyContent: "space-between",
               height: "100%",
-              gridColumnStart: "2",
+              gridColumnStart: displayPartition ? "2" : "1",
               gridColumnEnd: "9",
             }}
           >
@@ -117,11 +118,7 @@ function App() {
         </div>
         <div
           style={{ height: "200px" }}
-          className={
-            displayPiano
-              ? "fullKeyboardContainer"
-              : "fullKeyboardContainer borderTransparent"
-          }
+          className={displayPiano ? "fullKeyboardContainer" : ""}
         >
           {displayPiano ? <PianoComponent /> : ""}
         </div>

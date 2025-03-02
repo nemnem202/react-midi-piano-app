@@ -70,7 +70,6 @@ export default function PianoComponent() {
         });
       }
     }
-    console.log(activeSuggestion);
   }, [activeSuggestion]);
 
   return (

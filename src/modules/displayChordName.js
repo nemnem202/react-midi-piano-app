@@ -8,21 +8,19 @@ export default function DisplayChordName() {
   const activeSuggestion = useStore((state) => state.activeSuggestion);
   const passedSuggestion = useStore((state) => state.passedSuggestion);
   const play = useStore((state) => state.play);
-  //console.log("displayChord module");
-
   useEffect(() => {
-    const container = document.querySelector(".chordContainer");
     if (!play) {
+      setChordContainer(
+        suggestion.nom,
+        nextSuggestion.nom,
+        activeSuggestion.nom,
+        passedSuggestion.nom
+      );
       return;
     }
     translateChords();
-    let chord = container.querySelectorAll("div");
-    chord.forEach((c) => {
-      adaptTextSize(c);
-    });
     setTimeout(() => {
       setChordContainer(
-        container,
         suggestion.nom,
         nextSuggestion.nom,
         activeSuggestion.nom,
@@ -36,12 +34,13 @@ export default function DisplayChordName() {
       <div class="passedChord">{passedSuggestion.nom}</div>
       <div class="activeChord">{activeSuggestion.nom}</div>
       <div class="nextChord">{nextSuggestion.nom}</div>
-      <div class="nextChord2">{suggestion.nom}</div>
+      <div class="nextChord2">{nextSuggestion.nom}</div>
     </div>
   );
 }
 
-function setChordContainer(container, sug, next, active, passed) {
+function setChordContainer(sug, next, active, passed) {
+  const container = document.querySelector(".chordContainer");
   if (passed && active && next && sug) {
     container.innerHTML = `
       <div class="passedChord">${passed}</div>
@@ -49,10 +48,6 @@ function setChordContainer(container, sug, next, active, passed) {
       <div class="nextChord">${next}</div>
       <div class="nextChord2">${sug}</div>
     `;
-    let chord = container.querySelectorAll("div");
-    chord.forEach((c) => {
-      adaptTextSize(c);
-    });
   }
 }
 
@@ -64,36 +59,20 @@ const translateChords = () => {
 
   passedChord.style.transform = "translateX(-110%)";
   passedChord.style.opacity = "0";
-  passedChord.style.fontSize = "100%";
-  adaptTextSize(passedChord);
+  passedChord.style.fontSize = "3vw";
 
   activeChord.style.transform = "translateX(-110%)";
   //activeChord.style.backgroundPosition = "0px 0";
-  activeChord.style.fontSize = "300%";
+  activeChord.style.fontSize = "3vw";
   activeChord.style.opacity = "0.5";
-  adaptTextSize(activeChord);
 
   nextChord.style.transform = "translateX(-110%)";
   //nextChord.style.backgroundPosition = "-420px 0";
-  nextChord.style.fontSize = "500%";
+  nextChord.style.fontSize = "4vw";
   nextChord.style.opacity = "1";
-  adaptTextSize(nextChord);
 
   nextChord2.style.transform = "translateX(-110%)";
   //nextChord2.style.backgroundPosition = "-840px 0";
   nextChord2.style.opacity = "0.5";
-  activeChord.style.fontSize = "300%";
-  adaptTextSize(nextChord2);
+  activeChord.style.fontSize = "3vw";
 };
-
-function adaptTextSize(e) {
-  let textLength = e.textContent.length;
-
-  if (textLength < 5) {
-    e.style.fontSize = "500%"; // Texte court => plus grand
-  } else if (textLength < 10) {
-    e.style.fontSize = "300%"; // Taille moyenne
-  } else {
-    e.style.fontSize = "100%"; // Texte long => plus petit
-  }
-}

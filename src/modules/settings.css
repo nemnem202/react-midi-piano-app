@@ -1,17 +1,26 @@
 .settingsContainer {
   display: flex;
-  height: 100%;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 6%;
-  gap: 2%;
+  padding: 2%;
 }
 
-.settingsContainer > div:not(.gridBlack, .gridWhite) {
-  padding: 0%;
-  flex-basis: 0;
-  flex: 1;
-  flex-shrink: 1;
+.settingsContainer > * {
+  margin-top: 10%;
+}
+
+.notesScalesContainer {
+  display: flex;
+  height: fit-content;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--color3-op);
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.settingsTitle {
+  padding: 6%;
+  background-color: var(--color3);
 }
 
 .setNotes,
@@ -55,7 +64,7 @@
   width: 50px;
   height: 20px;
   border-radius: 2px;
-  margin-left: 10px;
+  margin-left: 5%;
 }
 
 .theme1:hover,
@@ -92,4 +101,8 @@
 .scalesButtons button {
   width: 100%;
   height: 100%;
+}
+
+.modeButtons > * {
+  margin-left: 5%;
 }

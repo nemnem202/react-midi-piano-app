@@ -10,7 +10,9 @@ export default function setRandom(mode, notesList, scalesList, max) {
         scalesList.includes(index)
       );
     } else if (mode === 2) {
-      scaleOrChordArray = scales;
+      scaleOrChordArray = scales.filter((_, index) =>
+        scalesList.includes(index)
+      );
     }
 
     const randVal1 = Math.floor(Math.random() * notesList.length);
@@ -73,20 +75,4 @@ const midiToNote = (midiValue) => {
     "B",
   ];
   return notes[midiValue % 12];
-};
-
-const findChordName = (accord) => {
-  // Recherche dans le dictionnaire des accords
-  for (let chord of chordDictionary) {
-    // Trie les intervalles de l'accord pour comparaison
-    const sortedIntervals = chord.intervalles;
-
-    // Si les intervalles sont égaux, retourne le nom de l'accord
-    if (JSON.stringify(sortedIntervals) === JSON.stringify(accord)) {
-      return chord.nom;
-    }
-  }
-
-  // Si l'accord n'est pas trouvé
-  return null;
 };

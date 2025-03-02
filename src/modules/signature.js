@@ -15,6 +15,7 @@ export default function Signature() {
         style={{
           width: `${signature.toString().length + 2}ch`, // Ajuste la largeur en fonction du texte
           textAlign: "center", // Centre le texte
+          margin: "0% 5px",
         }}
         onFocus={(e) => e.target.select()}
         onClick={() => setPlay(false)}

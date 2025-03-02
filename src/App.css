@@ -7,7 +7,8 @@
   --foreground: #ededed;
   --color1: #248120;
   --color2: rgb(126, 45, 255);
-  --color3: rgb(45, 0, 117);
+  --color3: #261447;
+  --color3-op: rgba(38, 20, 71, 0.5);
   --color4: #b4298a;
   --color5: rgb(255 56 100);
   --color5op: rgba(255, 56, 100, 0.5);
@@ -142,7 +143,7 @@ body {
 }
 
 .Settings {
-  width: max-content;
+  width: 400px;
   height: 100vh;
   background: var(--gradient);
   background-size: 500%;
@@ -207,10 +208,10 @@ select {
   padding: 5px;
   font-weight: 600;
   border-radius: 3px;
+  font-size: 80%;
   margin: 0;
   outline: none;
   appearance: none;
-  margin: 0px 8px;
   overflow: hidden;
   -webkit-box-shadow: 0px 0px 2px 1px var(--color5op);
   -moz-box-shadow: 0px 0px 2px 1px var(--color5op);
@@ -244,57 +245,6 @@ input::-webkit-inner-spin-button {
 input::selection,
 textarea::selection {
   background-color: var(--background);
-}
-*/
-
-/* CSS */
-.button-64 {
-  align-items: center;
-  background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
-  border: 0;
-  border-radius: 8px;
-  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
-  box-sizing: border-box;
-  color: #ffffff;
-  display: flex;
-  font-family: Phantomsans, sans-serif;
-  font-size: 20px;
-  justify-content: center;
-  line-height: 1em;
-  max-width: 100%;
-  min-width: 140px;
-  padding: 3px;
-  text-decoration: none;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.button-64:active,
-.button-64:hover {
-  outline: 0;
-}
-
-.button-64 span {
-  background-color: rgb(5, 6, 45);
-  padding: 16px 24px;
-  border-radius: 6px;
-  width: 100%;
-  height: 100%;
-  transition: 300ms;
-}
-
-.button-64:hover span {
-  background: none;
-}
-
-@media (min-width: 768px) {
-  .button-64 {
-    font-size: 24px;
-    min-width: 196px;
-  }
 }
 
 .red {
@@ -348,6 +298,7 @@ textarea::selection {
   padding: 0% 5%;
   justify-content: center;
   align-items: center;
+  margin-bottom: 1%;
 }
 .partitionChordName > div {
   grid-row: 1;
@@ -357,7 +308,7 @@ textarea::selection {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   justify-content: center;
-  align-items: top;
+  align-items: center;
 }
 
 .scoreContainer {
@@ -390,7 +341,6 @@ textarea::selection {
 .fullKeyboardContainer {
   display: flex;
   background: var(--gradient);
-  border: 1px solid black;
   margin: 0% 10% 5% 10%;
   min-height: 70px;
   position: relative;
